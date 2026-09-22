@@ -2,12 +2,11 @@
 
 body {
   margin: 0;
-  background-color: #1e1e2f;
-  background-image: radial-gradient(circle at top, #2b2b40 0%, #1a1a24 100%);
+  background-color: #1a1a24;
   color: white;
   font-family: 'Nunito', sans-serif;
   height: 100vh;
-  overflow: hidden; /* Cấm cuộn trang để bắn không bị trượt */
+  overflow: hidden;
   display: flex;
   justify-content: center;
 }
@@ -16,26 +15,24 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   height: 100vh;
-  padding: 40px 0;
   box-sizing: border-box;
 }
 
 h2 {
   font-family: 'Fredoka One', cursive;
   color: #ffb703;
-  text-shadow: 0 4px 15px rgba(255, 183, 3, 0.4);
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
-/* Khung OTP ở giữa màn hình */
+/* Khung OTP */
 .otp-display {
   display: flex;
   gap: 15px;
   margin-top: 20px;
+  z-index: 10;
 }
 
 .otp-box {
@@ -48,20 +45,19 @@ h2 {
   justify-content: center;
   align-items: center;
   font-size: 2.5rem;
-  font-weight: bold;
   font-family: 'Fredoka One', cursive;
-  color: #00f5d4;
+  color: #1a1a24;
   transition: all 0.3s;
 }
 
 .otp-box.filled {
-  border: 2px solid #00f5d4;
-  background: rgba(0, 245, 212, 0.1);
-  box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+  border-style: solid;
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   transform: scale(1.05);
 }
 
-/* Khu vực súng cao su */
+/* Súng cao su */
 .slingshot-area {
   position: relative;
   width: 200px;
@@ -69,134 +65,108 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: auto;
-  margin-bottom: 50px;
+  margin-top: 40px;
+  z-index: 20;
 }
 
 .slingshot-frame {
   position: relative;
-  width: 100px;
-  height: 120px;
+  width: 120px;
+  height: 150px;
 }
 
-/* Vẽ hình súng chữ Y */
-.handle {
-  position: absolute;
-  bottom: 0;
-  left: 40px;
-  width: 20px;
-  height: 70px;
-  background: linear-gradient(90deg, #8B4513, #a0522d);
-  border-radius: 10px;
-  box-shadow: inset -2px -2px 5px rgba(0,0,0,0.4);
+.wooden-slingshot {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
 }
-.prong {
-  position: absolute;
-  top: 10px;
-  width: 15px;
-  height: 60px;
-  background: linear-gradient(90deg, #8B4513, #a0522d);
-  border-radius: 10px;
-  box-shadow: inset -2px -2px 5px rgba(0,0,0,0.4);
-}
-.prong.left { left: 10px; transform: rotate(-25deg); }
-.prong.right { right: 10px; transform: rotate(25deg); }
 
-/* Dây thun */
 .rubber-bands {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   width: 0;
   height: 0;
   overflow: visible;
 }
 .band {
-  stroke: #ff5400;
-  stroke-width: 6px;
+  stroke: #e63946;
+  stroke-width: 5px;
   stroke-linecap: round;
 }
 
-/* Viên đạn (Số) */
+/* Đạn đang trên nòng */
 .projectile {
   position: absolute;
   width: 50px;
   height: 50px;
-  background: radial-gradient(circle at 30% 30%, #ff006e, #c10053);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
-  font-weight: bold;
   font-family: 'Fredoka One', cursive;
+  color: #1a1a24;
   cursor: grab;
-  box-shadow: 0 10px 20px rgba(255, 0, 110, 0.4), inset -4px -4px 10px rgba(0,0,0,0.3);
-  z-index: 10;
+  box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.4);
+  z-index: 30;
 }
 .projectile:active { cursor: grabbing; }
+.projectile.shooting { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-/* Hiệu ứng đạn bay */
-.projectile.shooting {
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+/* Bể bóng ngẫu nhiên */
+.ball-pit {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 25vh; /* Khu vực đáy màn hình */
+  background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+  overflow: hidden;
 }
 
-/* Các con số treo lủng lẳng dưới đáy */
-.ammo-belt {
-  display: flex;
-  gap: 10px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border-top: 1px solid rgba(255,255,255,0.1);
-  width: 100vw;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.ammo-item {
+.pit-ball {
+  position: absolute;
   width: 45px;
   height: 45px;
-  background: radial-gradient(circle at 30% 30%, #3a86ff, #2563eb);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
   font-family: 'Fredoka One', cursive;
+  color: #1a1a24;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(58, 134, 255, 0.3);
-  transition: transform 0.2s;
-  animation: swing 3s infinite ease-in-out alternate;
+  box-shadow: inset -4px -4px 8px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.3);
+  /* Chuyển động mượt mà khi dạt ra như sóng */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.ammo-item:hover { transform: scale(1.2); }
 
-/* Chữ chúc mừng */
+.pit-ball:hover {
+  filter: brightness(1.2);
+}
+
+/* Thông báo thành công */
 .success-msg {
   position: absolute;
-  top: 25%;
-  background: rgba(0,0,0,0.8);
+  top: 30%;
+  background: rgba(255, 255, 255, 0.95);
   padding: 20px 40px;
   border-radius: 20px;
   text-align: center;
-  border: 2px solid #00f5d4;
-  backdrop-filter: blur(5px);
-  z-index: 20;
+  color: #1a1a24;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  z-index: 50;
 }
-
+.success-msg p { font-size: 1.5rem; font-weight: bold; }
 .reset-btn {
-  background: #ff006e;
-  color: white;
+  background: #ffb703;
+  color: #1a1a24;
   border: none;
   padding: 10px 20px;
   font-size: 1.2rem;
   font-family: 'Fredoka One', cursive;
   border-radius: 10px;
   cursor: pointer;
-  margin-top: 10px;
+  transition: transform 0.2s;
 }
-
-/* Hiệu ứng lắc lư cho số giống như đang treo */
-@keyframes swing {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(5px); }
-}
+.reset-btn:hover { transform: scale(1.1); }
